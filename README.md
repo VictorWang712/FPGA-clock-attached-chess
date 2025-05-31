@@ -1,3 +1,3 @@
 # digital-design-project
 
-Author: Yao Bingchen, Wang Shufan
+Author: Wang Shufan, Yao Bingchen
