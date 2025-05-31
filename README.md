@@ -1,4 +1,3 @@
 # digital-design-project
 
-
-User: YaoBingchen
+Author: Yao Bingchen, Wang Shufan
