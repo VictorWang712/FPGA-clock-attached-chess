@@ -6,8 +6,7 @@ module Top(
     input wire BTN_Y1,
     input wire BTN_Y2,
     input wire BTN_Y3,
-    input wire power_switch,
-    input wire toggle_switch,
+    input wire [15:0] switch,
     output wire ledclk,
     output wire ledclrn,
     output wire ledsout,
@@ -21,15 +20,16 @@ module Top(
 );
 
     // Internal signals
+    wire clk_500ms;
     wire clk_1s;
+    wire start;
+    wire buzzer_en;
     wire [31:0] divres;
     wire [3:0] btn_out;
     wire [31:0] hexs;
     wire [7:0] points;
     wire [7:0] LEs;
-    wire buzzer_en;
     wire [4:0] note;
-    wire start;
     wire [2:0] state;
     wire [15:0] parin;
 
@@ -39,7 +39,8 @@ module Top(
     // Instantiate modules
     clkdiv clkdiv_inst(.clk(clk), .rst(1'b0), .div_res(divres));
     assign start = divres[20];
-    
+
+    clk_500ms clk_500ms_inst(.clk(clk), .clk_500ms(clk_500ms));
     clk_1s clk_1s_inst(.clk(clk), .clk_1s(clk_1s));
 
     pbdebounce m1(.clk(divres[17]), .button(BTN_Y0), .pbreg(btn_out[0]));
@@ -49,12 +50,13 @@ module Top(
 
     chess_clock chess_clock_inst(
         .clk(clk),
-        .power_switch(power_switch),
-        .toggle_switch(toggle_switch),
+        .power_switch(switch[15]),
+        .toggle_switch(switch[0]),
         .btn1(btn_out[0]),
         .btn2(btn_out[1]),
         .btn3(btn_out[2]),
         .btn4(btn_out[3]),
+        .clk_500ms(clk_500ms),
         .clk_1s(clk_1s),
         .hexs(hexs),
         .points(points),
