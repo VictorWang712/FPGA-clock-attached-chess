@@ -163,3 +163,9 @@ set_property PACKAGE_PIN M22 [get_ports vga_hs]
 set_property PACKAGE_PIN M21 [get_ports vga_vs]
 set_property IOSTANDARD LVCMOS33 [get_ports vga_hs]
 set_property IOSTANDARD LVCMOS33 [get_ports vga_vs]
+
+set_property PACKAGE_PIN N18 [get_ports PS2_clk]
+set_property IOSTANDARD LVCMOS33 [get_ports PS2_clk]
+set_property PACKAGE_PIN M19 [get_ports PS2_data]
+set_property IOSTANDARD LVCMOS33 [get_ports PS2_data]
+
