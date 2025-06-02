@@ -16,9 +16,10 @@ module chess(
     reg [4:0] prev_key;
     reg selected; // Flag to indicate if a piece is currently selected
     reg [7:0] selected_piece; // Store the currently selected piece
+    reg [5:0] left, prev_left;
 
     // Reset and initialize positions
-    always @(posedge clk or posedge rst) begin
+    always @(posedge clk) begin
         if (rst) begin
             // Reset all pieces to their initial positions
             crt <= 6'b011011;
@@ -36,6 +37,7 @@ module chess(
             bq  <= 8'b10011111; bk  <= 8'b10100111;
             selected <= 0;
             selected_piece <= 8'b0;
+            left <= 6'd31;
         end else if (start) begin
             // Handle movement keys
             if (key[4] && !prev_key[4]) begin
@@ -52,13 +54,13 @@ module chess(
             end
             if (key[2] && !prev_key[2]) begin
                 // Move up
-                if (crt[2:0] > 3'b000) begin
+                if (crt[2:0] < 3'b111) begin
                     crt[2:0] <= crt[2:0] + 1;
                 end
             end
             if (key[1] && !prev_key[1]) begin
                 // Move down
-                if (crt[2:0] < 3'b111) begin
+                if (crt[2:0] > 3'b000) begin
                     crt[2:0] <= crt[2:0] - 1;
                 end
             end
@@ -72,12 +74,16 @@ module chess(
                     end
                 end else begin
                     // Move the selected piece
-                    move_piece(selected_piece, crt);
+                    remove_piece(crt);
+                    if (left ^ prev_left) begin
+                        move_piece(selected_piece, crt);
+                    end
                     selected <= 0;
                 end
             end
         end
         prev_key <= key;
+        prev_left <= left;
     end
 
     // Function to select a piece based on current position
@@ -221,9 +227,6 @@ module chess(
     // Procedure to move a piece to a new position
     task move_piece(input [7:0] piece, input [5:0] new_position);
         begin
-            // Check if the new position already has a piece and remove it
-            remove_piece(new_position);
-
             // Update the position of the selected piece
             case (piece)
                 wp0: begin
@@ -362,38 +365,134 @@ module chess(
     task remove_piece(input [5:0] position);
         begin
             // Check each piece and set its presence bit to 0 if it matches the position
-            if (wp0[5:0] == position) wp0[7] = 0;
-            else if (wp1[5:0] == position) wp1[7] = 0;
-            else if (wp2[5:0] == position) wp2[7] = 0;
-            else if (wp3[5:0] == position) wp3[7] = 0;
-            else if (wp4[5:0] == position) wp4[7] = 0;
-            else if (wp5[5:0] == position) wp5[7] = 0;
-            else if (wp6[5:0] == position) wp6[7] = 0;
-            else if (wp7[5:0] == position) wp7[7] = 0;
-            else if (wr0[5:0] == position) wr0[7] = 0;
-            else if (wr1[5:0] == position) wr1[7] = 0;
-            else if (wn0[5:0] == position) wn0[7] = 0;
-            else if (wn1[5:0] == position) wn1[7] = 0;
-            else if (wb0[5:0] == position) wb0[7] = 0;
-            else if (wb1[5:0] == position) wb1[7] = 0;
-            else if (wq[5:0] == position) wq[7] = 0;
-            else if (wk[5:0] == position) wk[7] = 0;
-            else if (bp0[5:0] == position) bp0[7] = 0;
-            else if (bp1[5:0] == position) bp1[7] = 0;
-            else if (bp2[5:0] == position) bp2[7] = 0;
-            else if (bp3[5:0] == position) bp3[7] = 0;
-            else if (bp4[5:0] == position) bp4[7] = 0;
-            else if (bp5[5:0] == position) bp5[7] = 0;
-            else if (bp6[5:0] == position) bp6[7] = 0;
-            else if (bp7[5:0] == position) bp7[7] = 0;
-            else if (br0[5:0] == position) br0[7] = 0;
-            else if (br1[5:0] == position) br1[7] = 0;
-            else if (bn0[5:0] == position) bn0[7] = 0;
-            else if (bn1[5:0] == position) bn1[7] = 0;
-            else if (bb0[5:0] == position) bb0[7] = 0;
-            else if (bb1[5:0] == position) bb1[7] = 0;
-            else if (bq[5:0] == position) bq[7] = 0;
-            else if (bk[5:0] == position) bk[7] = 0;
+            if (wp0[5:0] == position) begin
+                wp0[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wp1[5:0] == position) begin
+                wp1[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wp2[5:0] == position) begin
+                wp2[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wp3[5:0] == position) begin
+                wp3[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wp4[5:0] == position) begin
+                wp4[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wp5[5:0] == position) begin
+                wp5[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wp6[5:0] == position) begin
+                wp6[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wp7[5:0] == position) begin
+                wp7[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wr0[5:0] == position) begin
+                wr0[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wr1[5:0] == position) begin
+                wr1[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wn0[5:0] == position) begin
+                wn0[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wn1[5:0] == position) begin
+                wn1[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wb0[5:0] == position) begin
+                wb0[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wb1[5:0] == position) begin
+                wb1[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wq[5:0] == position) begin
+                wq[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (wk[5:0] == position) begin
+                wk[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bp0[5:0] == position) begin
+                bp0[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bp1[5:0] == position) begin
+                bp1[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bp2[5:0] == position) begin
+                bp2[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bp3[5:0] == position) begin
+                bp3[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bp4[5:0] == position) begin
+                bp4[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bp5[5:0] == position) begin
+                bp5[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bp6[5:0] == position) begin
+                bp6[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bp7[5:0] == position) begin
+                bp7[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (br0[5:0] == position) begin
+                br0[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (br1[5:0] == position) begin
+                br1[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bn0[5:0] == position) begin
+                bn0[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bn1[5:0] == position) begin
+                bn1[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bb0[5:0] == position) begin
+                bb0[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bb1[5:0] == position) begin
+                bb1[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bq[5:0] == position) begin
+                bq[7] = 0;
+                left = left - 1'b1;
+            end
+            else if (bk[5:0] == position) begin
+                bk[7] = 0;
+                left = left - 1'b1;
+            end
         end
     endtask
 
