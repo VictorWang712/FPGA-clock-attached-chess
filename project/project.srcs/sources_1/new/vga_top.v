@@ -11,27 +11,42 @@ module vga_top(
     output vga_vs
 );
 
-    wire vga_clock;
-    wire [31:0] divres;
+wire vga_clock;
+wire [31:0] divres;
 
-    clkdiv clkdiv_inst(.clk(clk), .rst(1'b0), .div_res(divres));
-    assign vga_clock = divres[1];
+clkdiv clkdiv_inst(
+    .clk(clk),
+    .rst(1'b0),
+    .div_res(divres)
+);
 
-    wire [8:0] row_addr;
-	wire [9:0] col_addr;
-	wire [11:0] vga_data;
+assign vga_clock = divres[1];
 
-    assign vga_data = 12'b0000_0000_1111;
+wire [9:0] row_addr;
+wire [9:0] col_addr;
+wire [11:0] pixel_data;
+wire rdn;
 
-    vgac v0 (
-		.vga_clk(vga_clock),
-		.clrn(switch[1]),
-		.d_in(vga_data),
-		.row_addr(row_addr),
-		.col_addr(col_addr),
-		.r(vga_red), .g(vga_green), .b(vga_blue),
-		.hs(vga_hs), .vs(vga_vs),
-        .rdn()
-	);
+board_rom u_image_rom (
+    .clk(vga_clock),
+    .row_addr(row_addr),
+    .col_addr(col_addr),
+    .rdn(rdn),
+    .pixel_data(pixel_data)
+);
+
+vga_ctrl v0 (
+    .vga_clk(vga_clock),
+    .clrn(switch[15]),
+    .d_in(pixel_data),
+    .row_addr(row_addr),
+    .col_addr(col_addr),
+    .rdn(rdn),
+    .r(vga_red),
+    .g(vga_green),
+    .b(vga_blue),
+    .hs(vga_hs),
+    .vs(vga_vs)
+);
 
 endmodule
