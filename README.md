@@ -1,6 +1,6 @@
 # FPGA-clock-attached-chess
 
-浙江大学[「数字逻辑设计」](https://guahao31.github.io/2025_DD/)课程大作业：基于 FPGA 制作的带有棋钟的国际象棋。
+浙江大学[「数字逻辑设计」](https://guahao31.github.io/2025_DD/)课程大作业：基于 FPGA 的带有棋钟的国际象棋。
 
 - 作者：王殊凡，姚秉辰
 - 设备：Xilinx Kintex-7 FPGA，键盘，DELL 显示器，荣耀平板 MagicPad 2
