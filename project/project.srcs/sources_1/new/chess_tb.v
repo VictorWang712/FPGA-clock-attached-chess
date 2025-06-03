@@ -30,7 +30,7 @@ module chess_tb;
 
     // Clock generation
     initial begin
-        clk = 0;
+        clk = 1;
         forever #5 clk = ~clk; // 10ns clock period
     end
 

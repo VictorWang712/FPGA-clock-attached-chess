@@ -34,19 +34,18 @@ module chess_clock_tb;
         .points(points),
         .LEs(LEs),
         .buzzer_en(buzzer_en),
-        .note(note),
         .state(state)
     );
 
     // Clock generation
     initial begin
-        clk = 0;
+        clk = 1;
         forever #5 clk = ~clk; // 100 MHz clock (5 ns period)
     end
 
     // 1-second clock generation
     initial begin
-        clk_1s = 0;
+        clk_1s = 1;
         forever #50000000 clk_1s = ~clk_1s; // 1 Hz clock (50,000,000 ns period)
     end
 
@@ -143,7 +142,7 @@ module chess_clock_tb;
         btn1 = 1'b0;
 
         // Observe countdown behavior
-        #500000000; // Run simulation for 1 second
+        #100000000; // Run simulation for 1 second
 
         // End simulation
         $stop;
